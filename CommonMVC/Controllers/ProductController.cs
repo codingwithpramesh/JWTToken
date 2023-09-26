@@ -58,9 +58,9 @@ namespace CommonMVC.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            string url = baseAddress + "user/Edit/" + id;
+            string url = baseAddress + "user/Update/" + id;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
@@ -74,7 +74,7 @@ namespace CommonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserViewModel userViewModel)
+        public async Task<IActionResult> Edit(Guid id, UserViewModel userViewModel)
         {
             string url = baseAddress + "user/Edit/" + id;
             var content = new StringContent(JsonConvert.SerializeObject(userViewModel), Encoding.UTF8, "application/json");
@@ -88,7 +88,7 @@ namespace CommonMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             string url = baseAddress + "user/Delete/" + id;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
@@ -107,7 +107,7 @@ namespace CommonMVC.Controllers
        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             string url = baseAddress + "user/Delete/" + id;
             HttpResponseMessage response = await _httpClient.DeleteAsync(url);
@@ -119,6 +119,23 @@ namespace CommonMVC.Controllers
 
  
             return RedirectToAction(nameof(Delete), new { id = id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            string url = baseAddress + "user/Details/" + id;
+            HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                UserViewModel userViewModel = JsonConvert.DeserializeObject<UserViewModel>(jsonResponse);
+                return View(userViewModel);
+            }
+
+           
+            return NotFound();
         }
     }
 }

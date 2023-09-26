@@ -16,7 +16,7 @@ namespace MovieAPIs.Controllers
             _context = context;
         }
 
-        [HttpGet ("Index")]
+        [HttpGet("Index")]
         public IActionResult Index()
         {
             var data = _context.users.ToList();
@@ -42,18 +42,20 @@ namespace MovieAPIs.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
-        public IActionResult Update([FromRoute] Guid id ,UpdateContactRequest contact)
+        public IActionResult Update([FromRoute] Guid id, UpdateContactRequest contact)
         {
-            var data  =  _context.users.Find(id);
-            if(data != null)
+            var data = _context.users.Find(id);
+            if (data != null)
             {
-                _context.users.Update(data);
+                data.Name = contact.Name;
+                data.Email = contact.Email;
+                data.Password = contact.Password;
                 _context.SaveChanges();
                 return Ok(data);
 
             }
             return NotFound();
-           
+
 
         }
 
@@ -72,6 +74,19 @@ namespace MovieAPIs.Controllers
             return NotFound();
 
 
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public IActionResult Details([FromRoute] Guid id)
+        {
+            var data = _context.users.Find(id);
+            if (data != null)
+            {
+
+                return Ok(data);
+            }
+            return NotFound();
         }
 
     }

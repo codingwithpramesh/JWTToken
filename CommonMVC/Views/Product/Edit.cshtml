@@ -1,0 +1,34 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8 offset-2">
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email"> Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password </label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" asp-action="Edit" class="btn btn-primary">Edit</button>
+            </div>
+
+            </div>
+    </div>
+
+</form>
