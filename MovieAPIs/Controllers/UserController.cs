@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MovieAPIs.Models.Domain;
 using PortFolio.Models.Domain;
+using PortFolio.Models.DTO;
 
 namespace MovieAPIs.Controllers
 {
@@ -11,16 +13,22 @@ namespace MovieAPIs.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbcontext _context;
-        public UserController(ApplicationDbcontext context)
+        private readonly IMapper _mapper;
+        public UserController(ApplicationDbcontext context , IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         [HttpGet("Index")]
         public IActionResult Index()
         {
-            var data = _context.users.ToList();
-            return Ok(data);
+            /*  var data = _context.users.ToList();
+              return Ok(data);*/
+
+            var users = _context.users.ToList();
+            var userDTOs = _mapper.Map<List<UserDataDTO>>(users);
+            return Ok(userDTOs);
         }
 
 
@@ -80,13 +88,15 @@ namespace MovieAPIs.Controllers
         [Route("{id:guid}")]
         public IActionResult Details([FromRoute] Guid id)
         {
-            var data = _context.users.Find(id);
-            if (data != null)
-            {
+            var user = _context.users.Find(id);
 
-                return Ok(data);
+            if (user == null)
+            {
+                return NotFound();
             }
-            return NotFound();
+
+            var userDto = _mapper.Map<UserDataDTO>(user);
+            return Ok(userDto);
         }
 
     }
