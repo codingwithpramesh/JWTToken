@@ -9,11 +9,11 @@ using MovieAPIs.Models.Domain;
 
 #nullable disable
 
-namespace MovieAPIs.Migrations
+namespace PortFolio.Migrations
 {
     [DbContext(typeof(ApplicationDbcontext))]
-    [Migration("20230920030140_finaltest")]
-    partial class finaltest
+    [Migration("20230924145240_apitest")]
+    partial class apitest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,11 +229,9 @@ namespace MovieAPIs.Migrations
 
             modelBuilder.Entity("MovieAPIs.Models.Domain.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -249,7 +247,31 @@ namespace MovieAPIs.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserData");
+                    b.ToTable("users");
+                });
+
+            modelBuilder.Entity("PortFolio.Models.Domain.TokenInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MovieAPIs.Models.Domain
+﻿namespace CommonMVC.Models
 {
-    public class User
+    public class UserViewModel
     {
-        [Key]
+
         public Guid Id { get; set; }
 
         public string Name { get; set; }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PortFolio.Models.Domain;
+using System.Diagnostics;
 
 namespace MovieAPIs.Models.Domain
 {
@@ -10,12 +12,13 @@ namespace MovieAPIs.Models.Domain
         {
             
         }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
         }
 
-        public DbSet<User> UserData { get; set; }
+       public DbSet<TokenInfo> Tokens { get; set; }
+
+        public DbSet<User> users { get; set; }
     }
 }

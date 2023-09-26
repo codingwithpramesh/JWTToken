@@ -1,0 +1,35 @@
+﻿@model List<UserViewModel>;
+
+@{
+    ViewData["Title"] = "List Of Data";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <table class="table">
+            <tr>
+                <td>@Html.DisplayNameFor(Model =>Model.First().Name) </td>
+                <td>@Html.DisplayNameFor(Model =>Model.First().Email) </td>
+                <td>@Html.DisplayNameFor(Model =>Model.First().Password) </td>
+                <td>Actions</td>
+            </tr>
+
+            @foreach (var abc in Model)
+            {
+                <tr>
+                    <td> @Html.DisplayFor(Model => abc.Name)</td>
+                    <td> @Html.DisplayFor(Model => abc.Email)</td>
+                     <td> @Html.DisplayFor(Model => abc.Password)</td>
+                   
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@abc.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@abc.Id">Delete</a>
+                        <a asp-action="Details" asp-route-id="@abc.Id">Details</a>
+                    </td>
+                </tr>
+            }
+
+
+        </table>
+    </div>
+</div>

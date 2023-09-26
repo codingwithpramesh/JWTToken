@@ -6,5 +6,7 @@ namespace MovieAPIs.Models.Domain
     {
 
         public string Name { get; set; }
+
+       // public string? ProfilePicture { get; set; }
     }
 }
