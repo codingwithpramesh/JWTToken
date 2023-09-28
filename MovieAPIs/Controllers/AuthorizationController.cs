@@ -75,13 +75,13 @@ namespace PortFolio.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
+            var user = await userManager.FindByNameAsync(model.Email);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
                 foreach (var userRole in userRoles)
@@ -152,7 +152,7 @@ namespace PortFolio.Controllers
                 return Ok(status);
             }
             // check if user exists
-            var userExists = await userManager.FindByNameAsync(model.Username);
+            var userExists = await userManager.FindByNameAsync(model.Email);
             if (userExists!=null)
             {
                 status.StatusCode = 0;
@@ -189,6 +189,15 @@ namespace PortFolio.Controllers
             return Ok(status);
 
         }
+
+
+/*
+        [HttpPost]
+
+        public IActionResult Login([FromRoute] LoginModel loginModel)
+        {
+            var data = _user
+        }*/
 
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieAPIs.Models.Domain;
+using PortFolio.Models;
 using PortFolio.Repositories.Abstract;
 using PortFolio.Repositories.Domain;
 using System.Text;
@@ -32,15 +33,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-// Adding Authentication  
+ 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-
-// Adding Jwt Bearer  
 .AddJwtBearer(options =>
 {
     options.SaveToken = true;
@@ -57,20 +56,25 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", build =>
+{
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}
+));
+
+var _jwtsetting = builder.Configuration.GetSection("JWT");
+builder.Services.Configure<JWT>(_jwtsetting);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
-
-app.UseCors(options =>
-            options.WithOrigins("*").
-            AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 
 app.UseAuthorization();

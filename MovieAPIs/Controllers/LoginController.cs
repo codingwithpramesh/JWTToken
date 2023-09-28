@@ -22,7 +22,7 @@ namespace PortFolio.Controllers
 
         }
 
-
+/*
         [HttpPost]
         public IActionResult Login([FromBody] User user)
         {
@@ -58,6 +58,6 @@ namespace PortFolio.Controllers
             };
 
             return jwtToken;
-        }
+        }*/
     }
 }
