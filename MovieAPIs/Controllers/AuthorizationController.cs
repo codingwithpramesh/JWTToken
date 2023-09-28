@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieAPIs.Models.Domain;
@@ -13,13 +14,15 @@ namespace PortFolio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = UserRoles.Admin)]
     public class AuthorizationController : ControllerBase
     {
-
         private readonly ApplicationDbcontext _context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ITokenService _tokenService;
+
+
         public AuthorizationController(ApplicationDbcontext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
@@ -177,12 +180,20 @@ namespace PortFolio.Controllers
 
             // add roles here
             // for admin registration UserRoles.Admin instead of UserRoles.Roles
+            if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+
             if (!await roleManager.RoleExistsAsync(UserRoles.User))
                 await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
             if (await roleManager.RoleExistsAsync(UserRoles.User))
             {
                 await userManager.AddToRoleAsync(user, UserRoles.User);
+            }
+
+            if (await roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await userManager.AddToRoleAsync(user, UserRoles.Admin);
             }
             status.StatusCode = 1;
             status.StatusMessage = "Sucessfully registered";
