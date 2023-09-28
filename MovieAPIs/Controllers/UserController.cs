@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieAPIs.Models.Domain;
 using PortFolio.Models.Domain;
 using PortFolio.Models.DTO;
@@ -14,7 +15,7 @@ namespace MovieAPIs.Controllers
     {
         private readonly ApplicationDbcontext _context;
         private readonly IMapper _mapper;
-        public UserController(ApplicationDbcontext context , IMapper mapper)
+        public UserController(ApplicationDbcontext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
@@ -23,12 +24,12 @@ namespace MovieAPIs.Controllers
         [HttpGet("Index")]
         public IActionResult Index()
         {
-            /*  var data = _context.users.ToList();
-              return Ok(data);*/
+            var data = _context.users.ToList();
+            return Ok(data);
 
-            var users = _context.users.ToList();
-            var userDTOs = _mapper.Map<List<UserDataDTO>>(users);
-            return Ok(userDTOs);
+            /*  var users = _context.users.ToList();
+              var userDTOs = _mapper.Map<List<UserDataDTO>>(users);
+              return Ok(userDTOs);*/
         }
 
 
@@ -60,16 +61,26 @@ namespace MovieAPIs.Controllers
                 data.Password = contact.Password;
                 _context.SaveChanges();
                 return Ok(data);
-
             }
             return NotFound();
-
-
         }
+
+
+        [HttpGet("Update")]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var data = await _context.users.FindAsync(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Ok(data);
+        }
+
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public IActionResult Delete([FromRoute] Guid id, UpdateContactRequest contact)
+        public IActionResult Delete([FromRoute] Guid id)
         {
             var data = _context.users.Find(id);
             if (data != null)
@@ -84,6 +95,7 @@ namespace MovieAPIs.Controllers
 
         }
 
+
         [HttpGet]
         [Route("{id:guid}")]
         public IActionResult Details([FromRoute] Guid id)
@@ -95,8 +107,8 @@ namespace MovieAPIs.Controllers
                 return NotFound();
             }
 
-            var userDto = _mapper.Map<UserDataDTO>(user);
-            return Ok(userDto);
+           // var userDto = _mapper.Map<UserDataDTO>(user);
+            return Ok(user);
         }
 
     }

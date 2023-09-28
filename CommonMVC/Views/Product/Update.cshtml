@@ -1,13 +1,17 @@
-﻿
-@model UserViewModel
+﻿@model UserViewModel
 
 @{
-    ViewData["Title"] = "Create Product";
+    ViewData["Title"] = "Edit Product";
 }
-<form asp-action="Delete" method="post" enctype="multipart/form-data">
+<form asp-action="Update" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-8 offset-2">
 
+            <div class="form-group">
+                <label asp-for="Id">Id</label>
+                <input asp-for="Id" class="form-control" disabled />
+                <span asp-validation-for="Id"></span>
+            </div>
 
             <div class="form-group">
                 <label asp-for="Name">Name</label>
@@ -16,23 +20,22 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Email">Email</label>
+                <label asp-for="Email"> Email</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email"></span>
             </div>
 
-
             <div class="form-group">
-                <label asp-for="Password"> Password</label>
+                <label asp-for="Password">Password </label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password"></span>
             </div>
 
-
             <div class="form-group">
-                <button type="submit" asp-action="Delete" class="btn btn-primary">Delete</button>
+                <button type="submit" asp-action="Update" class="btn btn-primary">Edit</button>
             </div>
-        </div>
+
+            </div>
     </div>
 
 </form>

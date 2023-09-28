@@ -14,7 +14,8 @@ namespace CommonMVC.Controllers
 
         public ProductController()
         {
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient() ;
+
             _httpClient.BaseAddress = baseAddress;
         }
 
@@ -44,7 +45,7 @@ namespace CommonMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserViewModel userViewModel)
         {
-            string url = baseAddress + "user/Create";
+            string url = baseAddress + "user";
             var content = new StringContent(JsonConvert.SerializeObject(userViewModel), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(url, content);
 
@@ -58,9 +59,9 @@ namespace CommonMVC.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Update(Guid id)
         {
-            string url = baseAddress + "user/Update/" + id;
+            string url = $"{baseAddress}user/Update/?id="+ id;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
@@ -74,9 +75,9 @@ namespace CommonMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, UserViewModel userViewModel)
+        public async Task<IActionResult> Update(Guid id, UserViewModel userViewModel)
         {
-            string url = baseAddress + "user/Edit/" + id;
+            string url = $"{baseAddress}User/"+ id;
             var content = new StringContent(JsonConvert.SerializeObject(userViewModel), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PutAsync(url, content);
 
@@ -88,9 +89,10 @@ namespace CommonMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(Guid id)
+        [Route("Product/DeleteData")]
+        public async Task<IActionResult> DeleteData(Guid id)
         {
-            string url = baseAddress + "user/Delete/" + id;
+            string url = baseAddress + "User/"+ id;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
@@ -105,26 +107,24 @@ namespace CommonMVC.Controllers
         }
 
        
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+            
+        [HttpDelete("{id:Guid}"), ActionName("DeleteData")]
+        [Route("Product/DeleteData")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            string url = baseAddress + "user/Delete/" + id;
+            string url = $"{baseAddress}User/"+ id;
             HttpResponseMessage response = await _httpClient.DeleteAsync(url);
-
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction(nameof(Index));
             }
-
- 
             return RedirectToAction(nameof(Delete), new { id = id });
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            string url = baseAddress + "user/Details/" + id;
+            string url = baseAddress + "user/" + id;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
